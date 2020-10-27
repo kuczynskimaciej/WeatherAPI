@@ -7,11 +7,11 @@ namespace WeatherAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksController : ControllerBase
+    public class WeatherController : ControllerBase
     {
         private readonly WeatherSerivce _weatherSerivce;
 
-        public BooksController(WeatherSerivce weatherService)
+        public WeatherController(WeatherSerivce weatherService)
         {
             _weatherSerivce = weatherService;
         }
@@ -20,7 +20,7 @@ namespace WeatherAPI.Controllers
         public ActionResult<List<Weather>> Get() =>
             _weatherSerivce.Get();
 
-        [HttpGet("{id:length(24)}", Name = "GetBook")]
+        [HttpGet("{id:length(24)}", Name = "GetWeather")]
         public ActionResult<Weather> Get(string id)
         {
             var weather = _weatherSerivce.Get(id);
