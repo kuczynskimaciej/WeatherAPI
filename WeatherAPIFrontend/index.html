@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="vievport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Weather</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+
+<body>
+    <canvas id="myChart" width="300" height="100"></canvas>
+    <script src="refreshScript.js"></script>
+    <script>
+        async function getWeather() {
+            const response = await fetch(api_url);
+            const data = await response.json();
+            console.log(data);
+            const { hour, temp, hum } = data;
+
+            var hours = data.map(x => x.hour).reverse();
+            var temperatures = data.map(x => x.temp).reverse();
+            var humidities = data.map(x => x.humidity).reverse();
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: hours,
+                    datasets: [{
+                        label: 'Temp',
+                        data: temperatures,
+                        showLine: true,
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1,
+                        fill: false,
+                    },
+                    {
+                        label: 'Hum',
+                        data: humidities,
+                        showLine: true,
+                        borderColor: [
+                            'rgba(137, 196, 244, 1)'
+                        ],
+                        borderWidth: 1,
+                        fill: false,
+                    }
+                    ]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Hour'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Temp'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+        const api_url = 'https://192.168.0.102:5001/api/weather'
+        getWeather();
+    </script>
+</body>
+
+</html>
