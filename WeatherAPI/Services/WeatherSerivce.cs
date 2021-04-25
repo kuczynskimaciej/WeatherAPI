@@ -9,28 +9,28 @@ namespace WeatherAPI.Services
 {
     public class WeatherSerivce
     {
-        private readonly IMongoCollection<Weather> _weather;
+        private readonly IMongoCollection<WeatherModel> _weather;
 
         public WeatherSerivce(IWeatherDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _weather = database.GetCollection<Weather>(settings.WeatherCollectionName);
+            _weather = database.GetCollection<WeatherModel>(settings.WeatherCollectionName);
         }
 
-        public List<Weather> Get() => _weather.Find(weather => true).ToList();
+        public List<WeatherModel> Get() => _weather.Find(weather => true).Limit(10).SortByDescending(model => model.Hour).ToList();
 
-        public Weather Get(string id) => _weather.Find(weather => weather.Id == id).FirstOrDefault();
+        public WeatherModel Get(string id) => _weather.Find(weather => weather.Id == id).FirstOrDefault();
 
-        public Weather Create(Weather weather)
+        public WeatherModel Create(WeatherModel weatherModel)
         {
-            _weather.InsertOne(weather);
-            return weather;
+            _weather.InsertOne(weatherModel);
+            return weatherModel;
         }
 
-        public void Update(string id, Weather weatherIn) => _weather.ReplaceOne(weather => weather.Id == id, weatherIn);
-        public void Remove(Weather weatherIn) => _weather.DeleteOne(weather => weather.Id == weatherIn.Id);
+        public void Update(string id, WeatherModel weatherModel) => _weather.ReplaceOne(weather => weather.Id == id, weatherModel);
+        public void Remove(WeatherModel weatherModel) => _weather.DeleteOne(weather => weather.Id == weatherModel.Id);
         public void Remove(string id) => _weather.DeleteOne(weather => weather.Id == id);
     }
 }

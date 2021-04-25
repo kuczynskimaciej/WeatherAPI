@@ -26,26 +26,28 @@ namespace WeatherAPI
             services.AddSingleton<IWeatherDatabaseSettings>(sp => sp.GetRequiredService<IOptions<WeatherDatabaseSettings>>().Value);
             services.AddSingleton<WeatherSerivce>();
             services.AddControllers();
-
+            services.AddCors();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "WeatherAPI", Version = "v1" });
             });
         }
 
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors(options => options.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
             }
 
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "WeahterAPI v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "WeatherAPI v1");
             });
 
             app.UseHttpsRedirection();

@@ -17,11 +17,10 @@ namespace WeatherAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Weather>> Get() =>
-            _weatherSerivce.Get();
+        public ActionResult<List<WeatherModel>> Get() => _weatherSerivce.Get();
 
         [HttpGet("{id:length(24)}", Name = "GetWeather")]
-        public ActionResult<Weather> Get(string id)
+        public ActionResult<WeatherModel> Get(string id)
         {
             var weather = _weatherSerivce.Get(id);
 
@@ -34,15 +33,15 @@ namespace WeatherAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Weather> Create(Weather weather)
+        public ActionResult<WeatherModel> Create(WeatherModel weatherModel)
         {
-            _weatherSerivce.Create(weather);
+            _weatherSerivce.Create(weatherModel);
 
-            return CreatedAtRoute("GetWeather", new { id = weather.Id.ToString() }, weather);
+            return CreatedAtRoute("GetWeather", new { id = weatherModel.Id.ToString() }, weatherModel);
         }
 
         [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, Weather weatherIn)
+        public IActionResult Update(string id, WeatherModel weatherModel)
         {
             var weather = _weatherSerivce.Get(id);
 
@@ -51,7 +50,7 @@ namespace WeatherAPI.Controllers
                 return NotFound();
             }
 
-            _weatherSerivce.Update(id, weatherIn);
+            _weatherSerivce.Update(id, weatherModel);
 
             return NoContent();
         }

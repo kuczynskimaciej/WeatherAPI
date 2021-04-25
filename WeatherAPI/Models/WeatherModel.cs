@@ -8,7 +8,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace WeatherAPI.Models
 {
-    public class Weather
+    public class WeatherModel
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
